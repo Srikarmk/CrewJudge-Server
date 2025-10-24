@@ -17,13 +17,13 @@ The pip issues were caused by:
 ## 📋 Current Requirements (Fixed)
 
 ```
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
+fastapi==0.95.2
+uvicorn[standard]==0.22.0
 python-dotenv==1.0.0
 requests==2.31.0
-pydantic==2.5.0
+pydantic==1.10.12
 python-multipart==0.0.6
-gunicorn==21.2.0
+gunicorn==20.1.0
 ```
 
 ## 🚀 Render Deployment Steps
@@ -40,11 +40,30 @@ gunicorn==21.2.0
    GRADER_API_TOKEN=your_grader_api_token_here
    ```
 
-3. **Build Settings**:
+3. **Build Settings** (try these in order):
 
-   - **Build Command**: `pip install -r requirements.txt`
+   **Option 1 (Recommended for Render)**:
+
+   - **Build Command**: `pip install --upgrade pip && pip install -r requirements-render.txt`
    - **Start Command**: `python main.py`
-   - **Python Version**: Will use Python 3.11.7 (from runtime.txt)
+   - **Python Version**: Will use Python 3.9.16 (from runtime.txt)
+
+   **Option 2 (If Option 1 fails)**:
+
+   - **Build Command**: `pip install --upgrade pip && pip install -r requirements.txt`
+   - **Start Command**: `python main.py`
+   - **Python Version**: Will use Python 3.9.16 (from runtime.txt)
+
+   **Option 3 (Backup)**:
+
+   - **Build Command**: `pip install --upgrade pip && pip install -r requirements-minimal.txt`
+   - **Start Command**: `python main.py`
+   - **Python Version**: Will use Python 3.9.16 (from runtime.txt)
+
+   **Option 4 (Last resort)**:
+
+   - **Build Command**: `pip install --upgrade pip setuptools wheel && pip install -r requirements-minimal.txt --no-cache-dir`
+   - **Start Command**: `python main.py`
 
 4. **Deploy!**
 
