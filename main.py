@@ -57,7 +57,13 @@ load_kickoff_storage()
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001"],
+    allow_origins=[
+        "http://localhost:3000", 
+        "http://127.0.0.1:3000", 
+        "http://localhost:3001", 
+        "http://127.0.0.1:3001",
+        "https://crew-judge.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -508,19 +514,28 @@ async def health_check():
     """Health check endpoint"""
     return {
         "status": "healthy",
+        "version": "1.0.0",
+        "deployment": "production",
         "apis_configured": {
             "schema": bool(API_CONFIG["schema"]["base_url"] and API_CONFIG["schema"]["token"]),
             "eligibility": bool(API_CONFIG["eligibility"]["base_url"] and API_CONFIG["eligibility"]["token"]),
             "grader": bool(API_CONFIG["grader"]["base_url"] and API_CONFIG["grader"]["token"])
-        }
+        },
+        "cors_origins": [
+            "https://crew-judge.vercel.app",
+            "http://localhost:3000",
+            "http://localhost:3001"
+        ]
     }
 
 if __name__ == "__main__":
     import uvicorn
+    # Use PORT environment variable for Render deployment, fallback to 8001 for local development
+    port = int(os.getenv("PORT", 8001))
     uvicorn.run(
         app, 
         host="0.0.0.0", 
-        port=8001,
+        port=port,
         workers=1,
         loop="asyncio",
         timeout_keep_alive=300,
