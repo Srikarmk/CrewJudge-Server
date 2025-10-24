@@ -62,11 +62,14 @@ app.add_middleware(
         "http://127.0.0.1:3000", 
         "http://localhost:3001", 
         "http://127.0.0.1:3001",
-        "https://crew-judge.vercel.app"
+        "https://crew-judge.vercel.app",
+        "https://crew-judge.vercel.app/",
+        "https://www.crew-judge.vercel.app"
     ],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"]
 )
 
 # API Configuration
@@ -298,6 +301,21 @@ async def crew_ai_request(base_url: str, token: str, payload: Dict[str, Any], ti
 @app.get("/")
 async def root():
     return {"message": "CrewAI Hackathon Backend API", "version": "1.0.0"}
+
+@app.get("/api/test")
+async def test_endpoint():
+    """Test endpoint to verify CORS and backend connectivity"""
+    return {
+        "status": "success",
+        "message": "Backend is working!",
+        "cors_configured": True,
+        "timestamp": datetime.now().isoformat()
+    }
+
+@app.options("/api/{path:path}")
+async def options_handler(path: str):
+    """Handle CORS preflight requests"""
+    return {"message": "CORS preflight handled"}
 
 @app.post("/api/schema", response_model=ApiResponse)
 async def generate_schema(request: SchemaRequest):
